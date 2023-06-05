@@ -31,12 +31,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.paging.LoadState
+import androidx.paging.LoadStates
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.ivanbartolelli.kotlinreposcompose.R
 import com.ivanbartolelli.kotlinreposcompose.core.presentation.composables.MessageSnackbar
 import com.ivanbartolelli.kotlinreposcompose.core.presentation.navigation.Destination
-import com.ivanbartolelli.kotlinreposcompose.features.repositories.presentation.utils.DisplayConstants.ITEM_DEFAULT_KEY
 import kotlinx.coroutines.launch
+import kotlin.random.Random
 
 @Composable
 fun RepositoriesScreen(viewModel: RepositoriesViewModel = hiltViewModel(), navHostController: NavHostController) {
@@ -91,7 +92,7 @@ fun RepositoriesScreen(viewModel: RepositoriesViewModel = hiltViewModel(), navHo
                     count = repositories.itemCount,
                     key = { key ->
                         repositories[key]?.id
-                            ?: ITEM_DEFAULT_KEY
+                            ?: Random.nextLong()
                     },
                     contentType = { }
                 ) { index ->
@@ -105,11 +106,6 @@ fun RepositoriesScreen(viewModel: RepositoriesViewModel = hiltViewModel(), navHo
 
                 item {
                     RefreshLoadState(loadState = repositories.loadState.refresh) {
-                        repositories.retry()
-                    }
-                }
-                item {
-                    AppendLoadState(repositories.loadState.append) {
                         repositories.retry()
                     }
                 }
@@ -139,29 +135,14 @@ fun RefreshLoadState(loadState: LoadState, onRetry: () -> Unit) {
 }
 
 @Composable
-fun AppendLoadState(loadState: LoadState, onRetry: () -> Unit) {
-
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 10.dp)
-    ) {
-
-        when (loadState) {
-            is LoadState.NotLoading -> Unit
-            is LoadState.Loading -> Unit
-            is LoadState.Error -> {
-                ErrorState(loadState, onRetry)
-            }
-        }
-    }
-}
-
-@Composable
 private fun ErrorState(loadState: LoadState.Error, onRetry: () -> Unit) {
+
     Text(
-        text = loadState.error.message
-            ?: stringResource(id = R.string.text_not_connected),
+        text = stringResource(
+            id = R.string.text_error,
+            loadState.error.message
+                ?: stringResource(R.string.text_generic_error)
+        ),
         style = MaterialTheme.typography.caption,
         modifier = Modifier.padding(horizontal = 20.dp),
         textAlign = TextAlign.Center
