@@ -5,7 +5,11 @@ sealed class Destination(
     var route: String
 ){
     object Repositories : Destination("repositories", Route.Main.route)
-    object RepositoryDetail : Destination("repositoryDetail/{id}", Route.Main.route)
+    object RepositoryDetail : Destination("repositoryDetail/", Route.Main.route)
+}
+
+object DestinationParameters {
+    const val REPOSITORY_ID = "{id}"
 }
 
 sealed class Route(

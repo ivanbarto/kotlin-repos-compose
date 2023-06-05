@@ -13,6 +13,7 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.ivanbartolelli.kotlinreposcompose.core.presentation.navigation.Destination
+import com.ivanbartolelli.kotlinreposcompose.core.presentation.navigation.DestinationParameters
 import com.ivanbartolelli.kotlinreposcompose.core.presentation.theme.KotlinReposComposeTheme
 import com.ivanbartolelli.kotlinreposcompose.core.presentation.theme.enterTransition
 import com.ivanbartolelli.kotlinreposcompose.core.presentation.theme.exitTransition
@@ -53,7 +54,7 @@ private fun MainNavigation() {
                    enterTransition = { enterTransition }
         ) { RepositoriesScreen(navHostController = navController) }
 
-        composable(Destination.RepositoryDetail.name,
+        composable(Destination.RepositoryDetail.name + DestinationParameters.REPOSITORY_ID,
                    exitTransition = { exitTransition },
                    popEnterTransition = { popEnterTransition },
                    popExitTransition = { popExitTransition },

@@ -1,6 +1,8 @@
 package com.ivanbartolelli.kotlinreposcompose.features.repositories.presentation.repositoryDetail
 
 import android.content.Context
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -59,6 +62,7 @@ import kotlinx.coroutines.launch
 
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
+    val scrollState = rememberScrollState()
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -78,7 +82,9 @@ import kotlinx.coroutines.launch
         Column(
             Modifier
                 .fillMaxSize()
+                .scrollable(scrollState, Orientation.Vertical)
                 .padding(innerPadding), horizontalAlignment = Alignment.CenterHorizontally
+
         ) {
             TopAppBar(backgroundColor = MaterialTheme.customColorsPalette.transparent, elevation = 0.dp) {
                 IconButton(onClick = { navHostController.navigateUp() }) {

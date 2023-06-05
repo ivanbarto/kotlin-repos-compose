@@ -36,8 +36,6 @@ import com.ivanbartolelli.kotlinreposcompose.features.repositories.presentation.
 @Composable
 fun RepositoryItem(repository: Repository, onClick : (repository : Repository) -> Unit) {
 
-    val scrollState = rememberScrollState()
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -46,7 +44,6 @@ fun RepositoryItem(repository: Repository, onClick : (repository : Repository) -
             }
             .padding(bottom = 10.dp)
             .padding(10.dp)
-            .scrollable(scrollState, Orientation.Vertical)
     ) {
         ProfileImage(repository.owner?.avatarUrl)
 
