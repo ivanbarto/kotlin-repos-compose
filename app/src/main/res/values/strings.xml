@@ -23,4 +23,5 @@
     <string name="text_no_name">missing name</string>
     <string name="text_no_username">missing username</string>
     <string name="text_no_description">missing description</string>
+    <string name="text_clean_cache">clean cache</string>
 </resources>

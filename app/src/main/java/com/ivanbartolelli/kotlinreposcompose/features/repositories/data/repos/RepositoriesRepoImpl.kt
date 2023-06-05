@@ -33,6 +33,10 @@ class RepositoriesRepoImpl(
     override  fun getRepository(id: Long): Repository {
         return database.repositoriesDao().get(id).toRepository()
     }
+
+    override suspend fun clearRepositoriesCache() {
+        database.clearAllTables()
+    }
 }
 
 

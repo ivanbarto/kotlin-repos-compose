@@ -15,4 +15,9 @@ class RepositoriesViewModel @Inject constructor(private val paginatedRepositorie
     val repositories = paginatedRepositoriesRepo.getRepositories().cachedIn(viewModelScope)
 
     fun getRepository(id : Long) : Repository = paginatedRepositoriesRepo.getRepository(id)
+
+    suspend fun clearRepositoriesCache() {
+        paginatedRepositoriesRepo.clearRepositoriesCache()
+    }
+
 }

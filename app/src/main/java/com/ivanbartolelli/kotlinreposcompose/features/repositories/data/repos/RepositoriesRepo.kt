@@ -7,4 +7,7 @@ import kotlinx.coroutines.flow.Flow
 interface RepositoriesRepo {
     fun getRepositories(): Flow<PagingData<Repository>>
     fun getRepository(id : Long): Repository
+
+    suspend fun clearRepositoriesCache()
+
 }

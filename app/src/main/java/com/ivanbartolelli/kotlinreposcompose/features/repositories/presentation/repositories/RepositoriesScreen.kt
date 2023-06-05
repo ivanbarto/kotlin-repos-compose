@@ -2,27 +2,31 @@ package com.ivanbartolelli.kotlinreposcompose.features.repositories.presentation
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -32,13 +36,14 @@ import com.ivanbartolelli.kotlinreposcompose.R
 import com.ivanbartolelli.kotlinreposcompose.core.presentation.composables.MessageSnackbar
 import com.ivanbartolelli.kotlinreposcompose.core.presentation.navigation.Destination
 import com.ivanbartolelli.kotlinreposcompose.features.repositories.presentation.utils.DisplayConstants.ITEM_DEFAULT_KEY
+import kotlinx.coroutines.launch
 
 @Composable
 fun RepositoriesScreen(viewModel: RepositoriesViewModel = hiltViewModel(), navHostController: NavHostController) {
 
     val scaffoldState = rememberScaffoldState()
-    var repositories = viewModel.repositories.collectAsLazyPagingItems()
-    val refreshState = repositories.loadState.refresh
+    val coroutineScope = rememberCoroutineScope()
+    val repositories = viewModel.repositories.collectAsLazyPagingItems()
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -54,12 +59,32 @@ fun RepositoriesScreen(viewModel: RepositoriesViewModel = hiltViewModel(), navHo
                     .padding(innerPadding)
             ) {
                 item {
-                    Text(
-                        text = stringResource(id = R.string.text_repositories),
-                        style = MaterialTheme.typography.h5,
-                        modifier = Modifier.padding(20.dp),
-                        fontWeight = FontWeight.Bold
-                    )
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = stringResource(id = R.string.text_repositories),
+                            style = MaterialTheme.typography.h5,
+                            modifier = Modifier.padding(20.dp),
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(
+                            modifier = Modifier
+                                .width(0.dp)
+                                .weight(1f)
+                        )
+                        IconButton(onClick = {
+                            coroutineScope.launch {
+                                viewModel.clearRepositoriesCache()
+                                repositories.refresh()
+                            }
+                        }) {
+                            Icon(
+                                imageVector = ImageVector.vectorResource(id = R.drawable.ic_clean_cache),
+                                contentDescription = stringResource(
+                                    R.string.text_clean_cache
+                                )
+                            )
+                        }
+                    }
                 }
 
                 items(
@@ -79,7 +104,12 @@ fun RepositoriesScreen(viewModel: RepositoriesViewModel = hiltViewModel(), navHo
                 }
 
                 item {
-                    RepositoriesLoadState(loadState = refreshState) {
+                    RefreshLoadState(loadState = repositories.loadState.refresh) {
+                        repositories.retry()
+                    }
+                }
+                item {
+                    AppendLoadState(repositories.loadState.append) {
                         repositories.retry()
                     }
                 }
@@ -89,26 +119,55 @@ fun RepositoriesScreen(viewModel: RepositoriesViewModel = hiltViewModel(), navHo
 }
 
 @Composable
-fun RepositoriesLoadState(loadState: LoadState, onRetry : () -> Unit) {
+fun RefreshLoadState(loadState: LoadState, onRetry: () -> Unit) {
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier
-        .fillMaxWidth()
-        .padding(top = 10.dp)) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 10.dp)
+    ) {
         when (loadState) {
             is LoadState.NotLoading -> Unit
             is LoadState.Loading -> {
                 CircularProgressIndicator()
             }
             is LoadState.Error -> {
-                Text(
-                    text = loadState.error.message
-                        ?: stringResource(id = R.string.text_not_connected),
-                    style = MaterialTheme.typography.caption
-                )
-                TextButton(onClick = { onRetry() }) {
-                    Text(text = stringResource(id = R.string.text_retry).uppercase(), color = MaterialTheme.colors.primary)
-                }
+                ErrorState(loadState, onRetry)
             }
         }
     }
 }
+
+@Composable
+fun AppendLoadState(loadState: LoadState, onRetry: () -> Unit) {
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 10.dp)
+    ) {
+
+        when (loadState) {
+            is LoadState.NotLoading -> Unit
+            is LoadState.Loading -> Unit
+            is LoadState.Error -> {
+                ErrorState(loadState, onRetry)
+            }
+        }
+    }
+}
+
+@Composable
+private fun ErrorState(loadState: LoadState.Error, onRetry: () -> Unit) {
+    Text(
+        text = loadState.error.message
+            ?: stringResource(id = R.string.text_not_connected),
+        style = MaterialTheme.typography.caption,
+        modifier = Modifier.padding(horizontal = 20.dp),
+        textAlign = TextAlign.Center
+    )
+    TextButton(onClick = { onRetry() }) {
+        Text(text = stringResource(id = R.string.text_retry).uppercase(), color = MaterialTheme.colors.primary)
+    }
+}
+
