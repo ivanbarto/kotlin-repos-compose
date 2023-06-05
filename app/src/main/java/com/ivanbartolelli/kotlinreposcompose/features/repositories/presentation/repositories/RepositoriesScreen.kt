@@ -14,8 +14,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.ivanbartolelli.kotlinreposcompose.R
 import com.ivanbartolelli.kotlinreposcompose.core.presentation.composables.MessageSnackbar
 import com.ivanbartolelli.kotlinreposcompose.core.presentation.theme.KotlinReposComposeTheme
 import com.ivanbartolelli.kotlinreposcompose.features.repositories.domain.models.Repository
@@ -44,12 +47,17 @@ fun RepositoriesScreen() {
             ) {
                 item {
                     Text(
-                        text = "Repositories",
+                        text = stringResource(id = R.string.text_repositories),
                         style = MaterialTheme.typography.h5,
-                        modifier = Modifier.padding(20.dp)
+                        modifier = Modifier.padding(20.dp),
+                        fontWeight = FontWeight.Bold
                     )
                 }
                 itemsIndexed(repositories.value) { _, repository ->
+                    RepositoryItem()
+                    Divider()
+                }
+                item {
                     RepositoryItem()
                     Divider()
                 }

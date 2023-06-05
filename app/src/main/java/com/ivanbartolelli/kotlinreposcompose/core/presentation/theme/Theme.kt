@@ -36,14 +36,12 @@ fun KotlinReposComposeTheme(darkTheme: Boolean = isSystemInDarkTheme(), content:
 
     val colors = if (darkTheme) DarkColorPalette else LightColorPalette
     val customColorsPalette = if (darkTheme) DarkCustomColorPalette else LightCustomColorPalette
-    val typography = if (darkTheme) DarkTypography else LightTypography
 
     CompositionLocalProvider(
         LocalCustomColorsPalette provides customColorsPalette
     ) {
         MaterialTheme(
             colors = colors,
-            typography = typography,
             shapes = Shapes,
             content = content
         )

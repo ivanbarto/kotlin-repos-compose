@@ -1,4 +1,23 @@
 <resources>
     <string name="app_name">Kotlin Repos Compose</string>
     <string name="text_github_user">github user profile image</string>
+    <string name="text_copy_link">copy link button</string>
+    <string name="text_view_github">View on GitHub</string>
+    <string name="text_http">HTTP url</string>
+    <string name="text_ssh">SSH url</string>
+    <string name="text_share">Share with other apps</string>
+    <string name="text_return">return</string>
+
+    <string name="text_repositories">Repositories</string>
+    <string name="text_by_user">By %1$s</string>
+    <string name="text_unknown_error">An unknown error has happened. Please, refresh and try again.</string>
+    <string name="text_not_connected">You are not connected to internet. Offline mode on!</string>
+
+    <string name="text_copied">Copied to clipboard!</string>
+    <string name="text_retry">retry</string>
+    <string name="text_no_internet">No Internet Connection</string>
+    <string name="text_last_update">Last update: %1$s</string>
+    <string name="text_created_at">Created at: %1$s</string>
+    <string name="text_share_url_message">Hey! Have a look at this cool repo that I\'ve found: %1$s</string>
+    <string name="text_share_repo">Share repo</string>
 </resources>
