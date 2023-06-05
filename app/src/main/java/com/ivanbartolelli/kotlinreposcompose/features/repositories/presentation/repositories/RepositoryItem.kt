@@ -2,6 +2,8 @@ package com.ivanbartolelli.kotlinreposcompose.features.repositories.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -26,23 +29,26 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.ivanbartolelli.kotlinreposcompose.R
 import com.ivanbartolelli.kotlinreposcompose.core.presentation.theme.KotlinReposComposeTheme
+import com.ivanbartolelli.kotlinreposcompose.features.repositories.domain.models.Repository
 import com.ivanbartolelli.kotlinreposcompose.features.repositories.presentation.utils.composables.ProfileImage
 import com.ivanbartolelli.kotlinreposcompose.features.repositories.presentation.utils.composables.WatchersCounter
 
 @Composable
-fun RepositoryItem() {
+fun RepositoryItem(repository: Repository, onClick : (repository : Repository) -> Unit) {
 
+    val scrollState = rememberScrollState()
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
-
+                onClick(repository)
             }
             .padding(bottom = 10.dp)
             .padding(10.dp)
+            .scrollable(scrollState, Orientation.Vertical)
     ) {
-        ProfileImage()
+        ProfileImage(repository.owner?.avatarUrl)
 
         Column(
             modifier = Modifier
@@ -50,13 +56,21 @@ fun RepositoryItem() {
                 .padding(start = 10.dp)
         ) {
             Text(
-                text = "google/repos",
+                text = repository.name
+                    ?: stringResource(R.string.text_no_name),
                 style = MaterialTheme.typography.h6,
                 overflow = TextOverflow.Ellipsis,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                maxLines = 1
             )
 
-            Text(text = "By ivi DXC", style = MaterialTheme.typography.body2)
+            Text(
+                text = stringResource(
+                    id = R.string.text_by_user,
+                    repository.owner?.userName
+                        ?: stringResource(R.string.text_no_username)
+                ), style = MaterialTheme.typography.body2
+            )
 
             Row() {
                 Spacer(
@@ -64,18 +78,10 @@ fun RepositoryItem() {
                         .width(0.dp)
                         .weight(1f)
                 )
-                WatchersCounter()
+                WatchersCounter(repository.watchersCount.toString())
             }
 
         }
 
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun Preview() {
-    KotlinReposComposeTheme {
-        RepositoryItem()
     }
 }

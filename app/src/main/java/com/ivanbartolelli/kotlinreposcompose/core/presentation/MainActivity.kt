@@ -18,8 +18,13 @@ import com.ivanbartolelli.kotlinreposcompose.core.presentation.theme.enterTransi
 import com.ivanbartolelli.kotlinreposcompose.core.presentation.theme.exitTransition
 import com.ivanbartolelli.kotlinreposcompose.core.presentation.theme.popEnterTransition
 import com.ivanbartolelli.kotlinreposcompose.core.presentation.theme.popExitTransition
+import com.ivanbartolelli.kotlinreposcompose.features.repositories.domain.models.Repository
 import com.ivanbartolelli.kotlinreposcompose.features.repositories.presentation.repositories.RepositoriesScreen
+import com.ivanbartolelli.kotlinreposcompose.features.repositories.presentation.repositoryDetail.RepositoryDetailScreen
+import com.ivanbartolelli.kotlinreposcompose.features.repositories.presentation.utils.BundleConstants.KEY_REPOSITORY
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,8 +51,17 @@ private fun MainNavigation() {
                    popEnterTransition = { popEnterTransition },
                    popExitTransition = { popExitTransition },
                    enterTransition = { enterTransition }
-        ) { RepositoriesScreen() }
+        ) { RepositoriesScreen(navHostController = navController) }
 
+        composable(Destination.RepositoryDetail.name,
+                   exitTransition = { exitTransition },
+                   popEnterTransition = { popEnterTransition },
+                   popExitTransition = { popExitTransition },
+                   enterTransition = { enterTransition }
+        ) { backStackEntry ->
+            RepositoryDetailScreen(navHostController = navController, backStackEntry = backStackEntry)
+
+        }
     }
 }
 

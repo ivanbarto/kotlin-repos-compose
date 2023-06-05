@@ -18,14 +18,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ivanbartolelli.kotlinreposcompose.R
-import com.ivanbartolelli.kotlinreposcompose.core.presentation.theme.KotlinReposComposeTheme
 import com.ivanbartolelli.kotlinreposcompose.core.presentation.theme.customColorsPalette
 
 @Composable
-fun Url() {
+fun Url(url: String, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -35,7 +33,7 @@ fun Url() {
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = "https://mattermodeling.stackexchange.com/questions/10598",
+                text = url,
                 modifier = Modifier
                     .padding(start = 20.dp, top = 10.dp, bottom = 10.dp, end = 10.dp)
                     .width(0.dp)
@@ -43,7 +41,7 @@ fun Url() {
                 style = MaterialTheme.typography.body2
             )
 
-            IconButton(onClick = { /*TODO*/ }, modifier = Modifier.padding(end = 10.dp)) {
+            IconButton(onClick = { onClick() }, modifier = Modifier.padding(end = 10.dp)) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_copy),
                     tint = MaterialTheme.colors.onBackground,
@@ -55,13 +53,5 @@ fun Url() {
                 )
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun UrlContainerPreview() {
-    KotlinReposComposeTheme {
-        Url()
     }
 }

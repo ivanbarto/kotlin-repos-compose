@@ -15,20 +15,21 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.ivanbartolelli.kotlinreposcompose.R
+import com.ivanbartolelli.kotlinreposcompose.core.presentation.theme.customColorsPalette
 
 @Composable
-fun ProfileImage() {
+fun ProfileImage(imageUrl : String?) {
     Card(modifier = Modifier.clip(CircleShape), elevation = 3.dp) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data("https://picsum.photos/200")
+                .data(imageUrl)
                 .crossfade(true)
                 .build(),
             placeholder = painterResource(R.drawable.ic_user),
             contentDescription = stringResource(R.string.text_github_user),
             modifier = Modifier
                 .size(70.dp)
-                .background(MaterialTheme.colors.background),
+                .background(MaterialTheme.customColorsPalette.profileImageBackground),
         )
     }
 }

@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.ivanbartolelli.kotlinreposcompose.R
 
 @Composable
-fun WatchersCounter() {
+fun WatchersCounter(count : String) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_eye),
@@ -23,6 +23,6 @@ fun WatchersCounter() {
             contentDescription = null,
             modifier = Modifier.size(24.dp)
         )
-        Text(text = "123234", Modifier.padding(start = 10.dp), style = MaterialTheme.typography.body2)
+        Text(text = count, Modifier.padding(start = 10.dp), style = MaterialTheme.typography.body2)
     }
 }

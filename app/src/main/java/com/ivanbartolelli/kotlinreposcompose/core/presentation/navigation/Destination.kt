@@ -5,7 +5,7 @@ sealed class Destination(
     var route: String
 ){
     object Repositories : Destination("repositories", Route.Main.route)
-    object RepositoryDetail : Destination("repositoryDetail", Route.Main.route)
+    object RepositoryDetail : Destination("repositoryDetail/{id}", Route.Main.route)
 }
 
 sealed class Route(
