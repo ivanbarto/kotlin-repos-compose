@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Kotlin Repos Compose</string>
+    <string name="text_github_user">github user profile image</string>
 </resources>
